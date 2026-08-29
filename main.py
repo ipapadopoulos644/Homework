@@ -11,8 +11,9 @@ MENU = """
 1. Add a task
 2. Show tasks
 3. Complete a task
-4. Delete a task
-5. Exit
+4. Reopen a task
+5. Delete a task
+6. Exit
 """
 
 
@@ -31,12 +32,14 @@ def main():
         elif choice == "3":
             complete_task(tasks)
         elif choice == "4":
-            delete_task(tasks)
+            reopen_task(tasks)
         elif choice == "5":
+            delete_task(tasks)
+        elif choice == "6":
             print("Goodbye!")
             break
         else:
-            print("Invalid choice. Enter a number from 1 to 5.")
+            print("Invalid choice. Enter a number from 1 to 6.")
 
 
 def save_tasks(tasks):
@@ -125,6 +128,21 @@ def complete_task(tasks):
     tasks[task_index]["completed"] = True
     save_tasks(tasks)
     print("Task completed.")
+
+
+def reopen_task(tasks):
+    """Mark a selected completed task as active again."""
+    task_index = _choose_task(tasks, "reopen")
+    if task_index is None:
+        return
+
+    if not tasks[task_index].get("completed", False):
+        print("This task is already active.")
+        return
+
+    tasks[task_index]["completed"] = False
+    save_tasks(tasks)
+    print("Task reopened.")
 
 
 def delete_task(tasks):

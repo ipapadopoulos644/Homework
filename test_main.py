@@ -91,6 +91,15 @@ class TaskManagerTestCase(unittest.TestCase):
         self.assertEqual(main.load_tasks(), tasks)
         self.assertIn("Task completed", output)
 
+    @patch("builtins.input", return_value="1")
+    def test_reopen_task_updates_and_saves_the_task(self, _mock_input):
+        tasks = [{"title": "Review the draft", "completed": True}]
+        output = self.capture_output(main.reopen_task, tasks)
+
+        self.assertFalse(tasks[0]["completed"])
+        self.assertEqual(main.load_tasks(), tasks)
+        self.assertIn("Task reopened", output)
+
     @patch("builtins.input", return_value="word")
     def test_non_numeric_task_number_is_rejected(self, _mock_input):
         tasks = [{"title": "Keep this", "completed": False}]
