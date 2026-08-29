@@ -59,7 +59,7 @@ def load_tasks():
         print("Warning: tasks.json could not be read. Starting with an empty list.")
         return []
 
-    if not isinstance(tasks, list):
+    if not isinstance(tasks, list) or any(not isinstance(task, dict) for task in tasks):
         print("Warning: tasks.json has an invalid format. Starting with an empty list.")
         return []
 

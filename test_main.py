@@ -44,6 +44,17 @@ class TaskManagerTestCase(unittest.TestCase):
         output = self.capture_output(main.load_tasks)
         self.assertIn("Warning", output)
 
+    def test_list_with_an_invalid_task_is_rejected(self):
+        self.tasks_file.write_text(
+            json.dumps([{"title": "Keep this", "completed": False}, "not a task"]),
+            encoding="utf-8",
+        )
+
+        output = self.capture_output(main.load_tasks)
+
+        self.assertEqual(output.count("Warning"), 1)
+        self.assertEqual(main.load_tasks(), [])
+
     @patch("builtins.input", return_value="Write a report")
     def test_add_task_saves_a_new_task(self, _mock_input):
         tasks = []
